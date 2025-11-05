@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoAdventurers - 铸造你的冒险者</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>CryptoAdventurers</h1>
+            </div>
+            <div class="wallet-section">
+                <button id="connectWalletBtn" class="btn-primary">连接钱包</button>
+                <div id="walletInfo" class="wallet-info hidden">
+                    <span id="walletAddress"></span>
+                    <span id="networkInfo"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>铸造属于你的独特冒险者</h2>
+                <p>每个冒险者都拥有随机属性、职业和稀有度。加入我们的冒险世界！</p>
+
+                <div class="mint-section">
+                    <div class="mint-info">
+                        <div class="info-item">
+                            <span>已铸造:</span>
+                            <span id="mintedCount">0</span>
+                            <span>/</span>
+                            <span id="totalSupply">1000</span>
+                        </div>
+                        <div class="info-item">
+                            <span>铸造价格:</span>
+                            <span id="mintPrice">0.001 ETH</span>
+                        </div>
+                    </div>
+
+                    <button id="mintBtn" class="btn-mint" disabled>
+                        连接钱包后铸造
+                    </button>
+
+                    <div class="transaction-status">
+                        <div id="txStatus" class="hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="my-adventurers hidden">
+            <div class="container">
+                <h3>我的冒险者</h3>
+                <div id="adventurersList" class="adventurers-grid">
+                    <!-- 动态生成的NFT卡片 -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 CryptoAdventurers. 所有权利保留。</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js" type="application/javascript"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
