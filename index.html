@@ -17,6 +17,8 @@
                 <div id="walletInfo" class="wallet-info hidden">
                     <span id="walletAddress"></span>
                     <span id="networkInfo"></span>
+                    <span id="walletBalance"></span>
+                    <button id="disconnectWalletBtn" class="btn-disconnect">断开</button>
                 </div>
             </div>
         </nav>
@@ -50,6 +52,14 @@
                         <div id="txStatus" class="hidden"></div>
                     </div>
                 </div>
+
+                <!-- 调试区域 -->
+                <div class="debug-section">
+                    <h4>调试信息</h4>
+                    <button onclick="checkMetaMask()">检查 MetaMask</button>
+                    <button onclick="checkNetwork()">检查网络</button>
+                    <div id="debugInfo"></div>
+                </div>
             </div>
         </section>
 
@@ -69,7 +79,8 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.1/dist/ethers.umd.min.js" type="application/javascript"></script>
+    <!-- 使用 ethers v5 稳定版本 -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script src="scripts/app.js"></script>
 </body>
 </html>

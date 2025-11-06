@@ -49,6 +49,11 @@ class NFTMintDApp {
             this.mintNFT();
         });
 
+        // 添加断开钱包事件监听
+        document.getElementById('disconnectWalletBtn').addEventListener('click', () => {
+            this.disconnectWallet();
+        });
+
         if (window.ethereum) {
             window.ethereum.on('accountsChanged', (accounts) => {
                 if (accounts.length > 0) {
@@ -98,13 +103,13 @@ class NFTMintDApp {
 
     async initializeEthers() {
         try {
-            // 使用 ethers v6 的写法
-            this.provider = new ethers.BrowserProvider(window.ethereum);
-            this.signer = await this.provider.getSigner();
+            // 使用 ethers v5 的写法
+            this.provider = new ethers.providers.Web3Provider(window.ethereum);
+            this.signer = this.provider.getSigner();
 
             // 检查网络
             const network = await this.provider.getNetwork();
-            const sepoliaChainId = 11155111n; // v6 中使用 BigInt
+            const sepoliaChainId = 11155111; // v5 中是数字，不是 BigInt
 
             console.log('当前网络:', network);
 
@@ -128,6 +133,22 @@ class NFTMintDApp {
             this.showMessage('初始化失败: ' + error.message, 'error');
             return false;
         }
+    }
+
+    // 断开钱包方法
+    disconnectWallet() {
+        // 在 DApp 层面断开连接（实际上只是重置状态）
+        // 注意：MetaMask 没有真正的"断开"API，这是模拟断开
+        this.handleDisconnect();
+        this.showMessage('已断开钱包连接', 'success');
+
+        // 清理操作
+        this.cleanup();
+    }
+
+    // 清理方法
+    cleanup() {
+        console.log('清理 DApp 状态');
     }
 
     // 添加网络切换功能
@@ -180,7 +201,14 @@ class NFTMintDApp {
             document.getElementById('walletInfo').classList.remove('hidden');
 
             const shortAddress = `${this.userAddress.slice(0, 6)}...${this.userAddress.slice(-4)}`;
-            document.getElementById('walletAddress').textContent = `地址: ${shortAddress}`;
+            document.getElementById('walletAddress').textContent = shortAddress;
+
+            // 更新网络信息
+            const network = await this.provider.getNetwork();
+            document.getElementById('networkInfo').textContent = this.getNetworkName(network.chainId);
+
+            // 更新余额
+            await this.updateWalletBalance();
 
             await this.updateMintInfo();
 
@@ -190,6 +218,32 @@ class NFTMintDApp {
             await this.loadUserNFTs();
         } catch (error) {
             console.error('更新UI失败:', error);
+        }
+    }
+
+    // 获取网络名称的辅助方法
+    getNetworkName(chainId) {
+        const networks = {
+            1: '以太坊主网',
+            11155111: 'Sepolia测试网',
+            5: 'Goerli测试网',
+            137: 'Polygon',
+            42161: 'Arbitrum',
+            10: 'Optimism'
+        };
+        return networks[chainId] || `网络 ${chainId}`;
+    }
+
+    // 显示钱包余额
+    async updateWalletBalance() {
+        try {
+            if (this.provider && this.userAddress) {
+                const balance = await this.provider.getBalance(this.userAddress);
+                document.getElementById('walletBalance').textContent =
+                `余额: ${ethers.utils.formatEther(balance).slice(0, 6)} ETH`;
+            }
+        } catch (error) {
+            console.error('更新余额失败:', error);
         }
     }
 
@@ -207,9 +261,9 @@ class NFTMintDApp {
             document.getElementById('mintedCount').textContent = totalSupply.toString();
             document.getElementById('totalSupply').textContent = maxSupply.toString();
 
-            // 使用 v6 的格式转换
+            // 使用 v5 的格式转换
             document.getElementById('mintPrice').textContent =
-            `${ethers.formatEther(mintPrice)} ETH`;
+            `${ethers.utils.formatEther(mintPrice)} ETH`;
 
         } catch (error) {
             console.error('更新铸造信息失败:', error);
@@ -287,7 +341,7 @@ class NFTMintDApp {
             }
 
             for (const tokenId of userNFTs) {
-                const tokenIdNum = Number(tokenId);
+                const tokenIdNum = tokenId.toNumber ? tokenId.toNumber() : Number(tokenId);
                 const stats = await this.contract.getAdventurerDetails(tokenIdNum);
                 const tokenURI = await this.contract.tokenURI(tokenIdNum);
 
@@ -375,6 +429,11 @@ class NFTMintDApp {
     }
 
     handleDisconnect() {
+        this.provider = null;
+        this.signer = null;
+        this.contract = null;
+        this.userAddress = null;
+
         document.getElementById('connectWalletBtn').classList.remove('hidden');
         document.getElementById('walletInfo').classList.add('hidden');
         document.getElementById('mintBtn').disabled = true;
@@ -397,7 +456,7 @@ window.checkNetwork = async function() {
     const debugInfo = document.getElementById('debugInfo');
     if (typeof window.ethereum !== 'undefined') {
         try {
-            const provider = new ethers.BrowserProvider(window.ethereum);
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
             const network = await provider.getNetwork();
             debugInfo.innerHTML = `当前网络: ${network.name} (ChainID: ${network.chainId})`;
         } catch (error) {

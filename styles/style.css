@@ -1,8 +1,7 @@
-/* styles/style.css */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
 }
 
 body {
@@ -36,10 +35,31 @@ nav {
 
 .wallet-info {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    gap: 10px;
     color: white;
     font-size: 0.9rem;
+}
+
+#walletAddress {
+font-family: monospace;
+background: rgba(255,255,255,0.1);
+padding: 4px 8px;
+border-radius: 4px;
+}
+
+#networkInfo {
+background: rgba(255,255,255,0.1);
+padding: 4px 8px;
+border-radius: 4px;
+font-size: 0.8rem;
+}
+
+#walletBalance {
+background: rgba(255,255,255,0.1);
+padding: 4px 8px;
+border-radius: 4px;
+font-size: 0.8rem;
 }
 
 /* 按钮样式 */
@@ -79,6 +99,22 @@ nav {
 .btn-mint:disabled {
     background: #ccc;
     cursor: not-allowed;
+}
+
+/* 断开按钮样式 */
+.btn-disconnect {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.3s;
+}
+
+.btn-disconnect:hover {
+    background: #ff3742;
 }
 
 /* 英雄区域 */
@@ -186,6 +222,41 @@ nav {
     font-size: 0.9rem;
 }
 
+/* 调试区域 */
+.debug-section {
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+}
+
+.debug-section h4 {
+    margin-bottom: 10px;
+}
+
+.debug-section button {
+    margin: 5px;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.debug-section button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#debugInfo {
+margin-top: 10px;
+padding: 10px;
+background: rgba(0, 0, 0, 0.2);
+border-radius: 5px;
+min-height: 40px;
+}
+
 /* 辅助类 */
 .hidden {
     display: none !important;
@@ -195,3 +266,34 @@ nav {
 .rarity-rare { color: #3B82F6; }
 .rarity-epic { color: #8B5CF6; }
 .rarity-legendary { color: #F59E0B; font-weight: bold; }
+
+/* 页脚 */
+footer {
+    background: rgba(0, 0, 0, 0.1);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: auto;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .hero h2 {
+        font-size: 2rem;
+    }
+
+    .wallet-info {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+    }
+
+    .adventurers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
