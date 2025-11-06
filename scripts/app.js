@@ -1,5 +1,14 @@
 class NFTMintDApp {
     constructor() {
+        // 验证 ethers 是否已加载
+        if (typeof ethers === 'undefined') {
+            console.error('ethers.js 未正确加载');
+            this.showMessage('应用程序依赖加载失败，请刷新页面', 'error');
+            return;
+        }
+
+        console.log('ethers 版本:', ethers.version);
+
         this.provider = null;
         this.signer = null;
         this.contract = null;
